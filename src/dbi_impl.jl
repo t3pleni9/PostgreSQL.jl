@@ -291,7 +291,7 @@ function DBI.fetchall(result::PostgresResultHandle)
 end
 
 function DBI.fetchdf(result::PostgresResultHandle)
-    column_names = Vector{Symbol}([symbol(bytestring(PostgreSQL.PQfname(result.ptr, i))) for i = 0:(length(result.types)-1)])
+    column_names = Vector{Symbol}([Symbol(unsafe_string(PostgreSQL.PQfname(result.ptr, i))) for i = 0:(length(result.types)-1)])
     df = DataFrame([[] for i=1:result.ncols], column_names)
     for row in results
       push!(df, row)
