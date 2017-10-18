@@ -291,12 +291,12 @@ function DBI.fetchall(result::PostgresResultHandle)
 end
 
 function DBI.fetchdf(result::PostgresResultHandle)
-    column_names = Vector{Symbol}([Symbol(unsafe_string(PostgreSQL.PQfname(result.ptr, i))) for i = 0:(length(result.types)-1)])
-    df = DataFrame([[] for i=1:result.ncols], column_names)
-    for row in results
+    column_names = [Symbol(unsafe_string(PostgreSQL.PQfname(result.ptr, i))) for i = 0:(length(result.types)-1)]
+
+    df = DataFrame([[] for i=1:result.ncols], Vector(column_names))
+    for row in result
       push!(df, row)
     end
-
     return df
 end
 
